@@ -1,0 +1,24 @@
+{
+  "name": "phantom-jetstream",
+  "version": "1.0.0",
+  "description": "Page Speed Utility for phantom.js",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cthos/phantom-jetstream.git"
+  },
+  "keywords": [
+    "phantomjs",
+    "speed",
+    "pagespeed"
+  ],
+  "author": "cthos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cthos/phantom-jetstream/issues"
+  },
+  "homepage": "https://github.com/cthos/phantom-jetstream"
+}
