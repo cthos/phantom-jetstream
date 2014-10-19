@@ -1,4 +1,5 @@
 module.exports = {
   PageSpeed : require('./page_speed'),
-  Reports : require('./report')
+  Reports : require('./report'),
+  Output : require('./output')
 }
