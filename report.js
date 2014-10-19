@@ -1,10 +1,18 @@
-var Report = function (file) {
+Output = require('./output');
+
+var Report = function (file, output) {
   if (!this instanceof arguments.callee) {
     return new arguments.callee(page);
   }
 
   this.fs = require('fs');
   this.file = file;
+
+  if (typeof output == 'undefined') {
+    output = new Output.TextOutput();
+  }
+
+  this.output = output;
 };
 
 Report.prototype = {
@@ -26,26 +34,7 @@ Report.prototype = {
   },
 
   write : function () {
-    var stream = this.fs.open(this.file, 'w');
-
-    for (var section in this.sections) {
-      stream.write(section + '\n' + '============================\n');
-
-      items = this.sections[section].content;
-      formatter = this.sections[section].formatter;
-
-      items = formatter.preformat(items);
-
-      for (var i = 0, len = items.length; i < len; i++) {
-        var msg = formatter.format(items[i]);
-
-        stream.write(msg + '\n');
-      }
-
-      stream.write("\n\n");
-    }
-
-    stream.close();
+    this.output.write(this.file, this.sections);
   }
 };
 
