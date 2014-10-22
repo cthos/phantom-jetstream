@@ -1,4 +1,5 @@
 var Reports = require('./report');
+var Event = require('./event');
 
 var PageSpeed = function (page, url) {
   if (!this instanceof arguments.callee) {
@@ -8,6 +9,8 @@ var PageSpeed = function (page, url) {
   this.page = page;
   this.url = url;
   this._loggingHandler = console.log;
+
+  this._eventDispatcher = Event.EventDispatcher.getInstance();
 
   this.setupPage();
 };
@@ -25,6 +28,11 @@ PageSpeed.prototype = {
   _metricTracker : null,
 
   _numCacheMisses : 0,
+
+  exitOnFinish : function (ex) {
+    this._exitOnFinish = ex;
+    return this;
+  },
 
   /**
    * Setter for logging page speed.
@@ -122,6 +130,8 @@ PageSpeed.prototype = {
       var pageDone = self.checkForPageDone();
 
       if (pageDone) {
+        self._eventDispatcher.emit('pageDone');
+
         clearInterval(this);
         self.writeReport();
 
@@ -176,7 +186,7 @@ PageSpeed.prototype = {
     }
 
     return this;
-  }
+  },
 
   writeReport: function () {
     if (!this._reportGenerator) {

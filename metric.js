@@ -17,13 +17,13 @@ MetricTracker.prototype = {
   },
 
   setMetric : function (name, amount) {
-    if (!this.metricAmounts[name]) {
-      this.metricAmounts[name].currentAmount = amount;
+    if (!this.metrics[name] || !this.metrics[name].currentAmount) {
+      this.metrics[name].currentAmount = amount;
       return this;
     }
 
-    if (amount > this.metricAmounts[name]) {
-      this.metricAmounts[name].currentAmount = amount;
+    if (amount > this.metrics[name].currentAmount) {
+      this.metrics[name].currentAmount = amount;
     }
 
     return this;
@@ -31,10 +31,10 @@ MetricTracker.prototype = {
 
   testMetrics : function () {
     for (var metric in this.metrics) {
-      if (this.metricAmounts[metric] > this.metrics[metric]) {
+      if (this.metrics[metric].currentAmount > this.metrics[metric].threshold) {
         var metricMessage = "Metric (" + metric + ") failed. Current value: " +
-          this.metrics[name].currentAmount + " / Threshold : " + this.metrics[name].threshold;
-        this.failingMetrics.push();
+          this.metrics[metric].currentAmount + " / Threshold : " + this.metrics[metric].threshold;
+        this.failingMetrics.push(metricMessage);
       }
     }
 

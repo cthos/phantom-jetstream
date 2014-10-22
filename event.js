@@ -7,7 +7,7 @@ var EventDispatcher = function () {
 };
 
 EventDispatcher.prototype = {
-  callbacks = {},
+  callbacks : {},
 
   emit : function (event) {
     if (!this.callbacks[event]) {
@@ -15,7 +15,11 @@ EventDispatcher.prototype = {
     }
 
     for (var i = 0, len = this.callbacks[event].length; i < len; i++) {
-      
+      if (this.callbacks[event][i].scope) {
+        this.callbacks[event][i].callback.call(this.callbacks[event][i].scope, event);
+      } else {
+        this.callbacks[event][i].callback(event);
+      }
     }
   },
 
@@ -24,13 +28,12 @@ EventDispatcher.prototype = {
       this.callbacks[event] = [];
     }
 
-    var cbobj = {
+    cbobj = {
       callback : callback,
       scope : scope
     };
 
     this.callbacks[event].push(cbobj);
-
     return this;
   }
 };
@@ -43,3 +46,5 @@ EventDispatcher.getInstance = function () {
 
   return EventDispatcher._instance;
 };
+
+module.exports.EventDispatcher = EventDispatcher;
