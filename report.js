@@ -53,6 +53,10 @@ var SpeedFormatter = function () {};
 
 SpeedFormatter.prototype = {
   format : function (item) {
+    if (item.url.indexOf('http') < 0) {
+      item.url = item.url.substr(0, 100);
+    }
+
     return item.url + ' - ' + item.speed + ' ms';
   },
 
