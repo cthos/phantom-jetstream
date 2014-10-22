@@ -60,7 +60,7 @@ PageSpeed.prototype = {
   metricTracker : function (m) {
     this._metricTracker = m;
     return this;
-  }
+  },
 
   /**
    * Sets up the page variables to log what we want to track.
