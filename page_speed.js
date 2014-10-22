@@ -22,6 +22,9 @@ PageSpeed.prototype = {
   _exitOnFinish: true,
 
   _reportGenerator: null,
+  _metricTracker : null,
+
+  _numCacheMisses : 0,
 
   /**
    * Setter for logging page speed.
@@ -54,6 +57,11 @@ PageSpeed.prototype = {
     return this;
   },
 
+  metricTracker : function (m) {
+    this._metricTracker = m;
+    return this;
+  }
+
   /**
    * Sets up the page variables to log what we want to track.
    */
@@ -71,6 +79,8 @@ PageSpeed.prototype = {
 
       self.log("Page finished in " + self.timer.pagespeed + " ms", self._logPageSpeed);
       self.addItemToReport('Page Speed', self.timer.pagespeed + " ms");
+
+      self.logMetric('page-speed', self.timer.pagespeed);
     };
 
     this.page.onResourceRequested = function(request) {
@@ -92,12 +102,17 @@ PageSpeed.prototype = {
 
       self.log(response.url + " loaded in " + reqTime + " ms.", self._logResourceSpeed);
       self.addItemToReport('Resource Speed', {"speed" : reqTime, "url" : response.url});
+      self.logMetric('resource-speed', reqTime);
 
       var cache = self.resources[response.url].headers['X-Cache'];
 
       if (cache && cache == 'MISS') {
         self.log(response.url + " CACHE MISS", self._logCache);
         self.addItemToReport("X-Cache Misses", response.url + " CACHE MISS");
+
+        self._numCacheMisses++;
+
+        self.logMetric('cache-misses', self._numCacheMisses);
       }
 
       self.timer.lastRequestTime = new Date().getTime();
@@ -154,6 +169,14 @@ PageSpeed.prototype = {
 
     this._reportGenerator.addToSection(section, item);
   },
+
+  logMetric : function (metric, amount) {
+    if (this._metricTracker) {
+      this._metricTracker.setMetric(metric, amount);
+    }
+
+    return this;
+  }
 
   writeReport: function () {
     if (!this._reportGenerator) {
