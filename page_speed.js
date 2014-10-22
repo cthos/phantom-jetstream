@@ -134,6 +134,7 @@ PageSpeed.prototype = {
 
         clearInterval(this);
         self.writeReport();
+        page.close();
 
         if (self._exitOnFinish) {
           phantom.exit();
