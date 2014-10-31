@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/cthos/phantom-jetstream/issues"
   },
-  "homepage": "https://github.com/cthos/phantom-jetstream"
+  "homepage": "https://github.com/cthos/phantom-jetstream",
+  "dependencies": {
+    "handlebars": "^2.0.0"
+  }
 }
