@@ -40,8 +40,16 @@ Report.prototype = {
 
 var DefaultFormatter = function () {};
 
+// TODO: Clean up the style logic so it's actually clean.
+// It's messy as it is right now.
+
 DefaultFormatter.prototype = {
-  format : function (item) {
+  format : function (item, style) {
+    var styleMethod = style + 'Format';
+    if (style && typeof this[styleMethod] == 'function') {
+      return this[styleMethod](item);
+    }
+
     return JSON.stringify(item);
   },
   preformat: function (items) {
@@ -52,12 +60,24 @@ DefaultFormatter.prototype = {
 var SpeedFormatter = function () {};
 
 SpeedFormatter.prototype = {
-  format : function (item) {
+  format : function (item, style) {
+    var styleMethod = style + 'Format';
+    if (style && typeof this[styleMethod] == 'function') {
+      return this[styleMethod](item);
+    }
     if (item.url.indexOf('http') < 0) {
       item.url = item.url.substr(0, 100);
     }
 
     return item.url + ' - ' + item.speed + ' ms';
+  },
+
+  tableFormat : function (item) {
+    if (item.url.indexOf('http') < 0) {
+      item.url = item.url.substr(0, 100);
+    }
+
+    return '<tr><td class="table-url">' + item.url + '</td><td>' + item.speed + ' ms</td></tr>';
   },
 
   preformat : function (items) {
