@@ -6,7 +6,7 @@ TextOutput = function () {
   }
 
   this.fs = require('fs');
-}
+};
 
 TextOutput.prototype = {
   write: function (file, contents) {
