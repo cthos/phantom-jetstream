@@ -33,7 +33,11 @@
           {{#if this.style.table}}
           <table class="table">
           {{else}}
-          <pre>
+            {{#if this.style.div}}
+            <div>
+            {{else}}
+            <pre>
+            {{/if}}
           {{/if}}
             {{#each this.msgs}}
               {{{this}}}
@@ -41,7 +45,11 @@
           {{#if this.style.table}}
           </table>
           {{else}}
-          </pre>
+            {{#if this.style.div}}
+            </div>
+            {{else}}
+            </pre>
+            {{/if}}
           {{/if}}
         </div>
       </div>

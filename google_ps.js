@@ -1,4 +1,5 @@
 var wp = require('webpage');
+var ev = require('./event')
 
 var GooglePageSpeed = function (apiKey) {
   if (!this instanceof arguments.callee) {
@@ -15,6 +16,7 @@ GooglePageSpeed.prototype = {
   setReport : function (report) {
     this.report = report;
     this.report.addSection('Google Pagespeed', new GooglePSFormatter());
+    this.report.addSection('Google Meter', new GoogleChartFormatter());
   },
 
   getPage : function (url) {
@@ -25,12 +27,28 @@ GooglePageSpeed.prototype = {
 
     page.onLoadFinished = function () {
       var res = JSON.parse(page.plainText);
+      console.log(JSON.stringify(res, null, 2));
       self.addResultsToReport(res);
+
+      var disp = ev.EventDispatcher.getInstance();
+      disp.emit('googlePSDone');
+
+      page.close();
     };
+
+    page.open(callUrl);
   },
 
   addResultsToReport : function(results) {
-    this.report.addToSection('Google Pagespeed', {item : 'Score', value : results.score});
+    this.report.addToSection('Google Pagespeed', {name : 'Score', value : results.score});
+    this.report.addToSection('Google Meter', {
+      chtt : 'Google Page Speed',
+      chs : '180x100',
+      cht : 'gom',
+      chd : 't:' + results.score,
+      chxt : 'x,y',
+      chxl : '0:|' + results.score
+    });
   }
 };
 
@@ -41,8 +59,46 @@ var GooglePSFormatter = function () {
 };
 
 GooglePSFormatter.prototype = {
+  preformat : function (items) {
+    return items;
+  },
+
   // TODO: Implement
   format : function (item, style) {
-    return item.url + ' - ' + item.speed + ' ms';
+    return item.name + ' - ' + item.value;
   }
+};
+
+var GoogleChartFormatter = function () {
+  if (!this instanceof arguments.callee) {
+    return new arguments.callee(page);
+  }
+};
+
+GoogleChartFormatter.prototype = {
+  style : 'div',
+
+  preformat : function (items) {
+    return items;
+  },
+
+  // TODO: Implement
+  format : function (item, style) {
+    params = [];
+    for (var it in item) {
+      params.push(it + '=' + item[it]);
+    }
+    var src = 'https://chart.googleapis.com/chart?' + params.join('&');
+
+    if (style == 'html') {
+      return "<img src='" + src + "' />";
+    }
+
+    return src;
+  }
+};
+
+module.exports = {
+  GooglePageSpeed : GooglePageSpeed,
+  GooglePSFormatter : GooglePSFormatter
 };
