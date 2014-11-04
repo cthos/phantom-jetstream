@@ -27,7 +27,6 @@ GooglePageSpeed.prototype = {
 
     page.onLoadFinished = function () {
       var res = JSON.parse(page.plainText);
-      console.log(JSON.stringify(res, null, 2));
       self.addResultsToReport(res);
 
       var disp = ev.EventDispatcher.getInstance();
