@@ -3,5 +3,6 @@ module.exports = {
   Reports : require('./report'),
   Output : require('./output'),
   Metrics : require('./metric'),
-  Event : require('./event')
+  Event : require('./event'),
+  GooglePagespeed : require('./google_ps')
 };

@@ -23,6 +23,7 @@ PageSpeed.prototype = {
   _logResourceSpeed: false,
   _logPageSpeed: true,
   _exitOnFinish: true,
+  _writeReportOnFinish: true,
 
   _reportGenerator: null,
   _metricTracker : null,
@@ -31,6 +32,11 @@ PageSpeed.prototype = {
 
   exitOnFinish : function (ex) {
     this._exitOnFinish = ex;
+    return this;
+  },
+
+  writeReportOnFinish : function (wr) {
+    this._writeReportOnFinish = wr;
     return this;
   },
 
@@ -126,14 +132,17 @@ PageSpeed.prototype = {
       self.timer.lastRequestTime = new Date().getTime();
     };
 
-    setInterval(function () {
+    var pageDoneInterval = setInterval(function () {
       var pageDone = self.checkForPageDone();
 
       if (pageDone) {
         self._eventDispatcher.emit('pageDone');
+        clearInterval(pageDoneInterval);
 
-        clearInterval(this);
-        self.writeReport();
+        if (self._writeReportOnFinish) {
+          self.writeReport();
+        }
+
         page.close();
 
         if (self._exitOnFinish) {

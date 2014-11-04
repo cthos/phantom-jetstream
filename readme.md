@@ -92,3 +92,26 @@ ev.bind('pageDone', function (event) {
   phantom.exit();
 });
 ```
+
+### Google Pagespeed
+
+Basic Google Pagespeed reporting is included. You'll need an API_KEY, which can be obtained from google's developer console.
+
+Basic example:
+
+```js
+ev.bind('pageDone', function (event) {
+  console.log("Starting Pagespeed");
+  var ps = new JetStream.GooglePagespeed.GooglePageSpeed('KEY REDACTED');
+  ps.setReport(rp);
+  ps.getPage('http://www.alextheward.com');
+});
+
+ev.bind('googlePSDone', function(event) {
+  console.log("Pagespeed done.")
+  rp.write();
+  phantom.exit();
+});
+```
+
+The full example can be found in examples/gpagespeed.js

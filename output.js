@@ -6,7 +6,7 @@ TextOutput = function () {
   }
 
   this.fs = require('fs');
-}
+};
 
 TextOutput.prototype = {
   write: function (file, contents) {
@@ -62,15 +62,19 @@ HtmlOutput.prototype = {
       formatter = contents[section].formatter;
       items = formatter.preformat(items);
 
-      var style = null;
+      var style = 'html';
 
       if (formatter instanceof Report.SpeedFormatter) {
         style = 'table';
         sect.style.table = true;
       }
 
+      if (formatter.style) {
+        sect.style[formatter.style] = true;
+      }
+
       for (var i = 0, len = items.length; i < len; i++) {
-        msgs.push(formatter.format(items[i], 'table'));
+        msgs.push(formatter.format(items[i], style));
       }
 
       sect.msgs = msgs;
