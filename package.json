@@ -1,6 +1,6 @@
 {
   "name": "phantom-jetstream",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Page Speed Utility for phantom.js",
   "main": "main.js",
   "scripts": {
