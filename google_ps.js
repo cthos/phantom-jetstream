@@ -75,7 +75,7 @@ var GoogleChartFormatter = function () {
 };
 
 GoogleChartFormatter.prototype = {
-  style : 'div',
+  dataStyle : 'text',
 
   preformat : function (items) {
     return items;
