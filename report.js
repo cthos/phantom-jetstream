@@ -38,10 +38,11 @@ Report.prototype = {
   }
 };
 
-var DefaultFormatter = function () {};
-
-// TODO: Clean up the style logic so it's actually clean.
-// It's messy as it is right now.
+var DefaultFormatter = function () {
+  if (!this instanceof arguments.callee) {
+    return new arguments.callee();
+  }
+};
 
 DefaultFormatter.prototype = {
   dataStyle: 'preformatted',
@@ -60,9 +61,9 @@ DefaultFormatter.prototype = {
 };
 
 var SpeedFormatter = function () {
-  this.hb = require('handlebars');
-  this.fs = require('fs');
-  this.template = this.fs.read('node_modules/phantom-jetstream/templates/component/list_item.html');
+  if (!this instanceof arguments.callee) {
+    return new arguments.callee();
+  }
 };
 
 SpeedFormatter.prototype = {
@@ -90,7 +91,7 @@ SpeedFormatter.prototype = {
       {value: item.speed}
     ];
 
-    return this.hb.compile(this.template)({cells: cells});
+    return TableItem.getInstance().format(cells);
   },
 
   preformat : function (items) {
@@ -105,8 +106,35 @@ SpeedFormatter.prototype = {
       return -1;
     });
   }
-}
+};
+
+var TableItem = function () {
+  if (!this instanceof arguments.callee) {
+    return new arguments.callee();
+  }
+
+  this.hb = require('handlebars');
+  this.fs = require('fs');
+  this.template = this.fs.read('node_modules/phantom-jetstream/templates/component/table_item.html');
+};
+
+TableItem.prototype = {
+  format : function (cells) {
+    return this.hb.compile(this.template)({cells: cells});
+  }
+};
+
+TableItem._instance = null;
+TableItem.getInstance = function () {
+  if (!TableItem._instance) {
+    TableItem._instance = new TableItem();
+  }
+
+  return TableItem._instance;
+};
+
 
 module.exports.Report = Report;
 module.exports.DefaultFormatter = DefaultFormatter;
 module.exports.SpeedFormatter = SpeedFormatter;
+module.exports.TableItem = TableItem;
