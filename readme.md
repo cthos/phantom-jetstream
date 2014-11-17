@@ -1,8 +1,12 @@
 ## Phantom-Jetstream
 
-Just a quick script for PhantomJS which logs page load speed, resource load speed and Varnish X-Cache misses.
+Phantom-Jetstream is an automated front-end testing tool designed to generate a
+human and machine readable output format upon which tests could be designed around.
 
-Eventually this could be something a bit more useful.
+At its most basic, it provides metrics on page resources, total page speed load time, and X-Cache misses.
+
+It also can be used to parse a full subset of Google Pagespeed results (only the HTML output for this is
+  presently formatted correctly.)
 
 ## Installation
 
@@ -53,7 +57,16 @@ landingPage.reportGenerator(new JetStream.Reports.Report('output.txt'));
 
 ### Output
 
-The output classes determine what the output of the Report class is, and defaults to TextOutput. There are no other output formats at this time.
+The output classes determine what the output of the Report class is, and defaults to TextOutput.
+
+HtmlOutput is also available:
+
+```js
+var output = new JetStream.Output.HtmlOutput();
+var rp = new JetStream.Reports.Report('output.html', output);
+
+ps.reportGenerator(rp);
+```
 
 ### Metrics
 
