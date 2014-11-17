@@ -44,7 +44,6 @@ HtmlOutput = function () {
 
 HtmlOutput.prototype = {
   write: function (file, contents) {
-    console.log(this.fs.workingDirectory);
     var template = this.fs.read('node_modules/phantom-jetstream/templates/basic.html');
     var stream = this.fs.open(file, 'w');
 
@@ -61,20 +60,11 @@ HtmlOutput.prototype = {
       items = contents[section].content;
       formatter = contents[section].formatter;
       items = formatter.preformat(items);
-
-      var style = 'html';
-
-      if (formatter instanceof Report.SpeedFormatter) {
-        style = 'table';
-        sect.style.table = true;
-      }
-
-      if (formatter.style) {
-        sect.style[formatter.style] = true;
-      }
+      
+      sect.style[formatter.dataStyle] = true;
 
       for (var i = 0, len = items.length; i < len; i++) {
-        msgs.push(formatter.format(items[i], style));
+        msgs.push(formatter.format(items[i], 'html'));
       }
 
       sect.msgs = msgs;

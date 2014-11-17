@@ -44,6 +44,8 @@ var DefaultFormatter = function () {};
 // It's messy as it is right now.
 
 DefaultFormatter.prototype = {
+  dataStyle: 'preformatted',
+
   format : function (item, style) {
     var styleMethod = style + 'Format';
     if (style && typeof this[styleMethod] == 'function') {
@@ -57,9 +59,15 @@ DefaultFormatter.prototype = {
   }
 };
 
-var SpeedFormatter = function () {};
+var SpeedFormatter = function () {
+  this.hb = require('handlebars');
+  this.fs = require('fs');
+  this.template = this.fs.read('node_modules/phantom-jetstream/templates/component/list_item.html');
+};
 
 SpeedFormatter.prototype = {
+  dataStyle: 'table',
+
   format : function (item, style) {
     var styleMethod = style + 'Format';
     if (style && typeof this[styleMethod] == 'function') {
@@ -72,12 +80,17 @@ SpeedFormatter.prototype = {
     return item.url + ' - ' + item.speed + ' ms';
   },
 
-  tableFormat : function (item) {
+  htmlFormat : function (item) {
     if (item.url.indexOf('http') < 0) {
       item.url = item.url.substr(0, 100);
     }
 
-    return '<tr><td class="table-url">' + item.url + '</td><td>' + item.speed + ' ms</td></tr>';
+    var cells = [
+      {value: item.url, class:"table-url"},
+      {value: item.speed}
+    ];
+
+    return this.hb.compile(this.template)({cells: cells});
   },
 
   preformat : function (items) {
