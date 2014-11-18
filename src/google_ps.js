@@ -37,6 +37,11 @@ GooglePageSpeed.prototype = {
   },
 
   addResultsToReport : function(results) {
+    if (results.error) {
+      this.report.addToSection('Google Pagespeed', {name : 'Error', value : results.error.message});
+      return;
+    }
+
     this.report.addToSection('Google Pagespeed', {name : 'Score', value : results.score});
     this.report.addToSection('Google Pagespeed', {name : 'Number of Total Resources', value : results.pageStats.numberResources});
     this.report.addToSection('Google Pagespeed', {name : 'Number of JS Resources', value : results.pageStats.numberJsResources});
