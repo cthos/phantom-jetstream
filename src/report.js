@@ -1,14 +1,10 @@
-Output = require('./output');
+var Output = require('./output');
 
 var Report = function (file, output) {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
   this.fs = require('fs');
   this.file = file;
 
-  if (typeof output == 'undefined') {
+  if (typeof output === 'undefined') {
     output = new Output.TextOutput();
   }
 
@@ -19,7 +15,7 @@ Report.prototype = {
   sections: {},
 
   addSection : function (sectionName, formatter) {
-    if (typeof formatter == 'undefined') {
+    if (typeof formatter === 'undefined') {
       formatter = new DefaultFormatter();
     }
 
@@ -38,18 +34,14 @@ Report.prototype = {
   }
 };
 
-var DefaultFormatter = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee();
-  }
-};
+var DefaultFormatter = function () {};
 
 DefaultFormatter.prototype = {
   dataStyle: 'preformatted',
 
   format : function (item, style) {
     var styleMethod = style + 'Format';
-    if (style && typeof this[styleMethod] == 'function') {
+    if (style && typeof this[styleMethod] === 'function') {
       return this[styleMethod](item);
     }
 
@@ -65,18 +57,14 @@ DefaultFormatter.prototype = {
   }
 };
 
-var SpeedFormatter = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee();
-  }
-};
+var SpeedFormatter = function () {};
 
 SpeedFormatter.prototype = {
   dataStyle: 'table',
 
   format : function (item, style) {
     var styleMethod = style + 'Format';
-    if (style && typeof this[styleMethod] == 'function') {
+    if (style && typeof this[styleMethod] === 'function') {
       return this[styleMethod](item);
     }
     if (item.url.indexOf('http') < 0) {
@@ -105,7 +93,7 @@ SpeedFormatter.prototype = {
 
   preformat : function (items) {
     return items.sort(function (a, b) {
-      if (a.speed == b.speed) {
+      if (a.speed === b.speed) {
         return 0;
       }
       if (a.speed < b.speed) {
@@ -118,10 +106,6 @@ SpeedFormatter.prototype = {
 };
 
 var TableItem = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee();
-  }
-
   this.hb = require('handlebars');
   this.fs = require('fs');
   this.template = this.fs.read('node_modules/phantom-jetstream/templates/component/table_item.html');
