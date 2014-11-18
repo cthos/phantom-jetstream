@@ -2,13 +2,28 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" />
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- TODO: Move this to be bundled or likewise generate an HTML Out package -->
+    <script src="https://raw.githubusercontent.com/joequery/Stupid-Table-Plugin/master/stupidtable.min.js"></script>
 
     <style>
       body {padding-top: 50px;}
       .table-url {width: 700px; overflow: hidden;}
       table {table-layout:fixed; overflow: hidden; white-space: nowrap;}
+      th:hover, .section-heading:hover {cursor: pointer;}
+
     </style>
+
+    <script type="text/javascript">
+      $(function () {
+        $('.collapseable').on('click', '.col-trigger', function (e) {
+          $(e.currentTarget).parent().find('.col-content').toggle('fast');
+        });
+
+        $('table').stupidtable();
+      });
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -25,13 +40,20 @@
     </nav>
     <div class="container">
       {{#each sections}}
-      <div class="section">
-        <h2 class="section-heading">
+      <div class="section collapseable">
+        <h2 class="section-heading col-trigger">
           {{this.section}}
         </h2>
-        <div class="section-output">
+        <div class="section-output col-content">
           {{#if this.style.table}}
           <table class="table">
+            <thead>
+              <tr>
+              {{#each this.headers}}
+                <th data-sort="{{this.type}}">{{this.name}}</th>
+              {{/each}}
+              </tr>
+            </thead>
           {{else}}
             {{#if this.style.text}}
             <div>

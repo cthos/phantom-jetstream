@@ -55,6 +55,11 @@ DefaultFormatter.prototype = {
 
     return JSON.stringify(item);
   },
+
+  getEntryHeader : function () {
+    return [{name: "Item", type: "string"}];
+  },
+
   preformat: function (items) {
     return items;
   }
@@ -79,6 +84,10 @@ SpeedFormatter.prototype = {
     }
 
     return item.url + ' - ' + item.speed + ' ms';
+  },
+
+  getEntryHeader : function () {
+    return [{name: "URL", type: "string"}, {name: "Speed", type: "int"}];
   },
 
   htmlFormat : function (item) {
