@@ -1,10 +1,6 @@
 var Report = require('./report');
 
-TextOutput = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
+var TextOutput = function () {
   this.fs = require('fs');
 };
 
@@ -15,8 +11,8 @@ TextOutput.prototype = {
     for (var section in contents) {
       stream.write(section + '\n' + '============================\n');
 
-      items = contents[section].content;
-      formatter = contents[section].formatter;
+      var items = contents[section].content;
+      var formatter = contents[section].formatter;
 
       items = formatter.preformat(items);
 
@@ -33,11 +29,7 @@ TextOutput.prototype = {
   }
 };
 
-HtmlOutput = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
+var HtmlOutput = function () {
   this.fs = require('fs');
   this.hb = require('handlebars');
 };
@@ -57,8 +49,8 @@ HtmlOutput.prototype = {
 
       var msgs = [];
 
-      items = contents[section].content;
-      formatter = contents[section].formatter;
+      var items = contents[section].content;
+      var formatter = contents[section].formatter;
       items = formatter.preformat(items);
 
       sect.style[formatter.dataStyle] = true;

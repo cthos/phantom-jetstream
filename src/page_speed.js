@@ -2,10 +2,6 @@ var Reports = require('./report');
 var Event = require('./event');
 
 var PageSpeed = function (page, url) {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
   this.page = page;
   this.url = url;
   this._loggingHandler = console.log;
@@ -105,7 +101,7 @@ PageSpeed.prototype = {
     };
 
     this.page.onResourceReceived = function(response) {
-      if (response.stage != 'end') {
+      if (response.stage !== 'end') {
         return;
       }
 
@@ -120,7 +116,7 @@ PageSpeed.prototype = {
 
       var cache = self.resources[response.url].headers['X-Cache'];
 
-      if (cache && cache == 'MISS') {
+      if (cache && cache === 'MISS') {
         self.log(response.url + " CACHE MISS", self._logCache);
         self.addItemToReport("X-Cache Misses", response.url + " CACHE MISS");
 
@@ -143,7 +139,7 @@ PageSpeed.prototype = {
           self.writeReport();
         }
 
-        page.close();
+        self.page.close();
 
         if (self._exitOnFinish) {
           phantom.exit();

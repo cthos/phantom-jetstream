@@ -3,10 +3,6 @@ var ev = require('./event');
 var Report = require('./report');
 
 var GooglePageSpeed = function (apiKey) {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
   this.apiKey = apiKey;
 };
 
@@ -62,10 +58,6 @@ GooglePageSpeed.prototype = {
 };
 
 var GooglePSFormatter = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
   this.hb = require('handlebars');
   this.fs = require('fs');
   this.template = this.fs.read('node_modules/phantom-jetstream/templates/component/table_item.html');
@@ -84,7 +76,7 @@ GooglePSFormatter.prototype = {
 
   // TODO: Implement
   format : function (item, style) {
-    if (style == 'html') {
+    if (style === 'html') {
       var cells = [
         {value: item.name},
         {value: item.value}
@@ -96,11 +88,7 @@ GooglePSFormatter.prototype = {
   }
 };
 
-var GoogleChartFormatter = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-};
+var GoogleChartFormatter = function () {};
 
 GoogleChartFormatter.prototype = {
   dataStyle : 'text',
@@ -114,13 +102,13 @@ GoogleChartFormatter.prototype = {
   },
 
   format : function (item, style) {
-    params = [];
+    var params = [];
     for (var it in item) {
       params.push(it + '=' + item[it]);
     }
     var src = 'https://chart.googleapis.com/chart?' + params.join('&');
 
-    if (style == 'html') {
+    if (style === 'html') {
       return "<img src='" + src + "' />";
     }
 
@@ -128,11 +116,7 @@ GoogleChartFormatter.prototype = {
   }
 };
 
-var GoogleRecFormatter = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-};
+var GoogleRecFormatter = function () {};
 
 GoogleRecFormatter.prototype = {
   dataStyle : 'text',
@@ -147,7 +131,7 @@ GoogleRecFormatter.prototype = {
 
   format : function (item, style) {
     // Ignore stuff that has no impact
-    if (item.ruleImpact == 0) {
+    if (0 === parseFloat(item.ruleImpact)) {
       return;
     }
 

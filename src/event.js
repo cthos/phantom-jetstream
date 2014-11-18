@@ -1,10 +1,4 @@
-var EventDispatcher = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-
-
-};
+var EventDispatcher = function () {};
 
 EventDispatcher.prototype = {
   callbacks : {},
@@ -28,7 +22,7 @@ EventDispatcher.prototype = {
       this.callbacks[event] = [];
     }
 
-    cbobj = {
+    var cbobj = {
       callback : callback,
       scope : scope
     };

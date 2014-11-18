@@ -1,8 +1,4 @@
-var MetricTracker = function () {
-  if (!this instanceof arguments.callee) {
-    return new arguments.callee(page);
-  }
-};
+var MetricTracker = function () {};
 
 MetricTracker.prototype = {
   metrics : {},
