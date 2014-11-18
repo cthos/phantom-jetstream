@@ -78,6 +78,10 @@ GooglePSFormatter.prototype = {
     return items;
   },
 
+  getEntryHeader : function () {
+    return [{name: "Name", type: "string"}, {name: "Value", type: "int"}];
+  },
+
   // TODO: Implement
   format : function (item, style) {
     if (style == 'html') {
@@ -103,6 +107,10 @@ GoogleChartFormatter.prototype = {
 
   preformat : function (items) {
     return items;
+  },
+
+  getEntryHeader : function () {
+    return [{name: "Chart", type: "string"}];
   },
 
   format : function (item, style) {
@@ -133,7 +141,12 @@ GoogleRecFormatter.prototype = {
     return items;
   },
 
+  getEntryHeader : function () {
+    return [{name: "Rule", type: "string"}];
+  },
+
   format : function (item, style) {
+    // Ignore stuff that has no impact
     if (item.ruleImpact == 0) {
       return;
     }
@@ -143,7 +156,8 @@ GoogleRecFormatter.prototype = {
 
     for (var i = 0, len = item.urlBlocks.length; i < len; i++) {
       var txt = this.textFormat(item.urlBlocks[i].header);
-      items.push(txt);
+      // TODO: Templaty hack.
+      items.push("<strong>" + txt + "</strong>");
 
       if (item.urlBlocks[i].urls) {
         for (var x = 0, xlen = item.urlBlocks[i].urls.length; x < xlen; x++) {

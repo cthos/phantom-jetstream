@@ -60,8 +60,9 @@ HtmlOutput.prototype = {
       items = contents[section].content;
       formatter = contents[section].formatter;
       items = formatter.preformat(items);
-      
+
       sect.style[formatter.dataStyle] = true;
+      sect.headers = formatter.getEntryHeader();
 
       for (var i = 0, len = items.length; i < len; i++) {
         msgs.push(formatter.format(items[i], 'html'));
