@@ -100,6 +100,18 @@ PageSpeed.prototype = {
       };
     };
 
+    this.page.onResourceError = function (err) {
+      if (err.errorCode === 6) {
+        console.log("SSL Error detected. Try running phantom with " +
+        "--ignore-ssl-errors=yes and --ssl-protocol=any");
+
+        self.page.close();
+        phantom.exit();
+      } else {
+        console.log("Error detected. Message: " + err.errorString);
+      }
+    };
+
     this.page.onResourceReceived = function(response) {
       if (response.stage !== 'end') {
         return;
