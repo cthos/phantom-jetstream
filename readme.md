@@ -8,6 +8,8 @@ At its most basic, it provides metrics on page resources, total page speed load 
 It also can be used to parse a full subset of Google Pagespeed results (only the HTML output for this is
   presently formatted correctly.)
 
+![Vanilla Screenshot](/examples/screenshots/vanilla-report.png?raw=true "Vanilla Screenshot")
+
 ## Installation
 
 ```bash
@@ -128,3 +130,6 @@ ev.bind('googlePSDone', function(event) {
 ```
 
 The full example can be found in examples/gpagespeed.js
+
+#### Report Screenshot
+![Google Pagespeed Screenshot](/examples/screenshots/gps-report.png?raw=true "Google Pagespeed Screenshot")
