@@ -8,11 +8,11 @@ TextOutput.prototype = {
   write: function (file, contents) {
     var stream = this.fs.open(file, 'w');
 
-    for (var section in contents) {
+    for (var section in contents.sections) {
       stream.write(section + '\n' + '============================\n');
 
-      var items = contents[section].content;
-      var formatter = contents[section].formatter;
+      var items = contents.sections[section].content;
+      var formatter = contents.sections[section].formatter;
 
       items = formatter.preformat(items);
 
@@ -41,7 +41,7 @@ HtmlOutput.prototype = {
 
     var sections = [];
 
-    for (var section in contents) {
+    for (var section in contents.sections) {
       var sect = {
         section : section,
         style : {}
@@ -49,8 +49,8 @@ HtmlOutput.prototype = {
 
       var msgs = [];
 
-      var items = contents[section].content;
-      var formatter = contents[section].formatter;
+      var items = contents.sections[section].content;
+      var formatter = contents.sections[section].formatter;
       items = formatter.preformat(items);
 
       sect.style[formatter.dataStyle] = true;
@@ -65,7 +65,7 @@ HtmlOutput.prototype = {
     }
 
     var compiled = this.hb.compile(template);
-    var htmlContents = compiled({sections : sections});
+    var htmlContents = compiled({sections : sections, pages : contents.pages});
 
     stream.write(htmlContents);
     stream.close();

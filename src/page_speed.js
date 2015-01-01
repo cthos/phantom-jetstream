@@ -144,9 +144,6 @@ PageSpeed.prototype = {
       var pageDone = self.checkForPageDone();
 
       if (pageDone) {
-        self._eventDispatcher.emit('pageDone');
-        clearInterval(pageDoneInterval);
-
         if (self._writeReportOnFinish) {
           self.writeReport();
         }
@@ -156,6 +153,9 @@ PageSpeed.prototype = {
         if (self._exitOnFinish) {
           phantom.exit();
         }
+
+        clearInterval(pageDoneInterval);
+        self._eventDispatcher.emit('pageDone');
       }
     }, 5000);
   },

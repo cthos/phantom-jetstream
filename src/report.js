@@ -9,10 +9,18 @@ var Report = function (file, output) {
   }
 
   this.output = output;
+  this.pages = [];
 };
 
 Report.prototype = {
   sections: {},
+
+  /**
+   * Allows you to link multiple pages from the header.
+   */
+  addPage : function (page) {
+    this.pages.push(page);
+  },
 
   addSection : function (sectionName, formatter) {
     if (typeof formatter === 'undefined') {
@@ -30,7 +38,7 @@ Report.prototype = {
   },
 
   write : function () {
-    this.output.write(this.file, this.sections);
+    this.output.write(this.file, this);
   }
 };
 
