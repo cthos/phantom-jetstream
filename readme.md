@@ -108,6 +108,28 @@ ev.bind('pageDone', function (event) {
 });
 ```
 
+### Site Speed
+
+phantom-jetstream allows you to queue up several pages on a site, and have basic HTML reports generated about them.
+
+```js
+var pages = [
+'portfolio',
+'talks',
+'blog',
+];
+
+var sspeed = new JetStream.SiteSpeed('http://alextheward.com', pages, '/tmp/sspeed/');
+var ev = JetStream.Event.EventDispatcher.getInstance();
+
+ev.bind('siteDone', function (event) {
+  console.log("DONE!");
+  phantom.exit(1);
+});
+
+sspeed.run();
+```
+
 ### Google Pagespeed
 
 Basic Google Pagespeed reporting is included. You'll need an API_KEY, which can be obtained from google's developer console.

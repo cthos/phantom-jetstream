@@ -2,7 +2,7 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css" />
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <!-- TODO: Move this to be bundled or likewise generate an HTML Out package -->
     <script src="https://raw.githubusercontent.com/joequery/Stupid-Table-Plugin/master/stupidtable.min.js"></script>
@@ -34,6 +34,20 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Main Report</a></li>
+            {{#if this.pages}}
+              <li class="pages">
+                <a href="#" id="pagesToggle" data-toggle="dropdown" role="button" aria-haspopup="true">
+                  Pages
+                </a>
+                <span class="carat"></span>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="pagesToggle">
+                  {{#each this.pages}}
+                    <li role="presentation">
+                      <a href="{{this}}">{{this}}</a>
+                    </li>
+                  {{/each}}
+                </ul>
+            {{/if}}
           </ul>
         </div>
       </div>
