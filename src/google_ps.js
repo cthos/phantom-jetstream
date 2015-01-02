@@ -28,7 +28,7 @@ GooglePageSpeed.prototype = {
       self.addResultsToReport(res);
 
       var disp = ev.EventDispatcher.getInstance();
-      disp.emit('googlePSDone');
+      disp.emit('googlePSDone', {goog: this});
 
       page.close();
     };

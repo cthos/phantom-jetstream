@@ -3,16 +3,16 @@ var EventDispatcher = function () {};
 EventDispatcher.prototype = {
   callbacks : {},
 
-  emit : function (event) {
+  emit : function (event, data) {
     if (!this.callbacks[event]) {
       return this;
     }
 
     for (var i = 0, len = this.callbacks[event].length; i < len; i++) {
       if (this.callbacks[event][i].scope) {
-        this.callbacks[event][i].callback.call(this.callbacks[event][i].scope, event);
+        this.callbacks[event][i].callback.call(this.callbacks[event][i].scope, event, data);
       } else {
-        this.callbacks[event][i].callback(event);
+        this.callbacks[event][i].callback(event, data);
       }
     }
   },
