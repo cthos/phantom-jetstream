@@ -10,10 +10,15 @@ var Report = function (file, output) {
 
   this.output = output;
   this.pages = [];
+  this.name = 'Page Speed Report';
 };
 
 Report.prototype = {
   sections: {},
+
+  setName : function (name) {
+    this.name = name;
+  },
 
   /**
    * Allows you to link multiple pages from the header.

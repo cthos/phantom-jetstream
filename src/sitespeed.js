@@ -38,6 +38,7 @@ SiteSpeed.prototype = {
     // Todo: Allow other output formats to be set.
     var output = new Output.HtmlOutput();
     var report = new Reports.Report(this.outputDir + '/' + this.pageFiles[np], output);
+    report.setName(np);
     // Wouldn't it be nice if there were just a .values?
     for (var key in this.pageFiles) {
       report.addPage(this.pageFiles[key]);

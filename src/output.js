@@ -65,7 +65,11 @@ HtmlOutput.prototype = {
     }
 
     var compiled = this.hb.compile(template);
-    var htmlContents = compiled({sections : sections, pages : contents.pages});
+    var htmlContents = compiled({
+      sections : sections,
+      pages : contents.pages,
+      name : contents.name
+    });
 
     stream.write(htmlContents);
     stream.close();
