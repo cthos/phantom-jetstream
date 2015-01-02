@@ -14,6 +14,14 @@ SiteSpeed.prototype = {
   ev : null,
   pageFiles : {},
   pageStack : [],
+  currentReport : null,
+  _autoNext : true,
+  currentUrl : null,
+
+  autoNext : function (next) {
+    this._autoNext = next;
+    return this;
+  },
 
   run : function () {
     this.setUp();
@@ -28,11 +36,13 @@ SiteSpeed.prototype = {
 
     var np = this.pageStack.pop();
     var pageUrl = this.baseSite + '/' + np;
+    this.currentUrl = pageUrl;
 
     var page = new PageSpeed(wp.create(), pageUrl)
         .logResourceSpeed(false)
         .logPageSpeed(false)
         .logCache(false)
+        .writeReportOnFinish(false)
         .exitOnFinish(false);
 
     // Todo: Allow other output formats to be set.
@@ -44,7 +54,10 @@ SiteSpeed.prototype = {
       report.addPage(this.pageFiles[key]);
     }
 
-    page.reportGenerator(report);
+    this.currentReport = report;
+    this.currentPage = page;
+
+    page.reportGenerator(this.currentReport);
     page.open();
   },
 
@@ -59,7 +72,12 @@ SiteSpeed.prototype = {
     var self = this;
 
     this.ev.bind('pageDone', function (event) {
-      self.next();
+      self.ev.emit('siteSpeedBeforeNext', {sitespeed: self.currentReport});
+
+      if (self._autoNext) {
+        self.currentReport.write();
+        self.next();
+      }
     });
   }
 };

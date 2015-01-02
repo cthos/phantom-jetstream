@@ -97,7 +97,9 @@ ev.bind('pageDone', function (event) {
 
 ### Event
 
-phantom-jetstream is bundled with a bare-bones event dispatcher. Currently it only emits the `pageDone` event so the external script can call phantom.exit() on its own, assuming PageSpeed is configured to not exit on page stop.
+phantom-jetstream is bundled with a bare-bones event dispatcher. Some events pass along data as a second parameter to the callback, but not all do.
+
+The list of events can be found in docs/events.md
 
 ```js
 var ev = JetStream.Event.EventDispatcher.getInstance();
@@ -124,7 +126,7 @@ var ev = JetStream.Event.EventDispatcher.getInstance();
 
 ev.bind('siteDone', function (event) {
   console.log("DONE!");
-  phantom.exit(1);
+  phantom.exit();
 });
 
 sspeed.run();
