@@ -96,7 +96,8 @@ PageSpeed.prototype = {
     this.page.onResourceRequested = function(request) {
       self.resources[request.url] = {
         'startTime': new Date(request.time).getTime(),
-        'headers': {}
+        'headers': {},
+        'size'   : 0,
       };
     };
 
@@ -113,6 +114,10 @@ PageSpeed.prototype = {
     };
 
     this.page.onResourceReceived = function(response) {
+      if (response.bodySize && response.bodySize > self.resources[response.url].size) {
+        self.resources[response.url].size = response.bodySize;
+      }
+      
       if (response.stage !== 'end') {
         return;
       }
@@ -121,9 +126,15 @@ PageSpeed.prototype = {
 
       var stopTime = new Date(response.time).getTime();
       var reqTime = stopTime - self.resources[response.url].startTime;
+      
+      var contentLength = self.resources[response.url].headers['Content-Length'];
 
       self.log(response.url + " loaded in " + reqTime + " ms.", self._logResourceSpeed);
-      self.addItemToReport('Resource Speed', {"speed" : reqTime, "url" : response.url});
+      self.addItemToReport('Resources', {
+        "speed" : reqTime,
+        "url" : response.url,
+        "size": contentLength ? contentLength : self.resources[response.url].size
+      });
       self.logMetric('resource-speed', reqTime);
 
       var cache = self.resources[response.url].headers['X-Cache'];
@@ -162,7 +173,7 @@ PageSpeed.prototype = {
 
   setupReport : function () {
     this._reportGenerator.addSection('Page Speed');
-    this._reportGenerator.addSection('Resource Speed', new Reports.SpeedFormatter());
+    this._reportGenerator.addSection('Resources', new Reports.ResourceFormatter());
     this._reportGenerator.addSection("X-Cache Misses");
   },
 

@@ -1,4 +1,5 @@
 var Output = require('./output');
+var humanize = require('humanize');
 
 var Report = function (file, output) {
   this.fs = require('fs');
@@ -70,9 +71,9 @@ DefaultFormatter.prototype = {
   }
 };
 
-var SpeedFormatter = function () {};
+var ResourceFormatter = function () {};
 
-SpeedFormatter.prototype = {
+ResourceFormatter.prototype = {
   dataStyle: 'table',
 
   format : function (item, style) {
@@ -84,11 +85,19 @@ SpeedFormatter.prototype = {
       item.url = item.url.substr(0, 100);
     }
 
-    return item.url + ' - ' + item.speed + ' ms';
+    return item.url + ' - ' + item.speed + ' ms @ ' + humanize.filesize(item.size);
   },
 
   getEntryHeader : function () {
-    return [{name: "URL", type: "string"}, {name: "Speed", type: "int"}];
+    return [{name: "URL", type: "string"}, {name: "Speed", type: "int"}, {name: "Size", type: "int"}];
+  },
+  
+  csvFormat: function (item) {
+    if (item.url.indexOf('http') < 0) {
+      item.url = item.url.substr(0, 100);
+    }
+
+    return item.url + ',' + item.speed + ',' + item.size;
   },
 
   htmlFormat : function (item) {
@@ -98,7 +107,8 @@ SpeedFormatter.prototype = {
 
     var cells = [
       {value: item.url, class:"table-url"},
-      {value: item.speed}
+      {value: item.speed},
+      {value: humanize.filesize(item.size), sortVal : item.size}
     ];
 
     return TableItem.getInstance().format(cells);
@@ -142,5 +152,5 @@ TableItem.getInstance = function () {
 
 module.exports.Report = Report;
 module.exports.DefaultFormatter = DefaultFormatter;
-module.exports.SpeedFormatter = SpeedFormatter;
+module.exports.ResourceFormatter = ResourceFormatter;
 module.exports.TableItem = TableItem;
