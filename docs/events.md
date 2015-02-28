@@ -13,6 +13,17 @@ ev.bind('pageDone', function (event) {
 });
 ```
 
+## resourceReceived
+
+This is dispatched after a resource request has completed. You can use it to log custom things, check custom headers, or do whatever you want with the resource requests.
+
+```js
+ev.bind('resourceReceived', function (event, data) {
+  console.log(JSON.stringify(data.headers));
+  console.log(data.size);
+});
+```
+
 ## siteDone
 
 Dispatched after the SiteSpeed class has finished iterating over all of its pages.
