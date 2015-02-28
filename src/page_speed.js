@@ -98,6 +98,7 @@ PageSpeed.prototype = {
         'startTime': new Date(request.time).getTime(),
         'headers': {},
         'size'   : 0,
+        'url'    : request.url
       };
     };
 
@@ -147,6 +148,8 @@ PageSpeed.prototype = {
 
         self.logMetric('cache-misses', self._numCacheMisses);
       }
+
+      self._eventDispatcher.emit('resourceReceived', self.resources[response.url]);
 
       self.timer.lastRequestTime = new Date().getTime();
     };
