@@ -1,5 +1,6 @@
 var Reports = require('./report');
 var Event = require('./event');
+var u = require('url');
 
 var PageSpeed = function (page, url) {
   this.page = page;
@@ -131,9 +132,14 @@ PageSpeed.prototype = {
       var contentLength = self.resources[response.url].headers['Content-Length'];
 
       self.log(response.url + " loaded in " + reqTime + " ms.", self._logResourceSpeed);
+      
+      // Parse out the main url when adding stuff to the report if it's the same
+      var mainUrl = u.parse(self.url);
+      var rUrl = u.parse(response.url);
+      
       self.addItemToReport('Resources', {
         "speed" : reqTime,
-        "url" : response.url,
+        "url" : mainUrl.host == rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname,
         "size": contentLength ? contentLength : self.resources[response.url].size
       });
       self.logMetric('resource-speed', reqTime);
