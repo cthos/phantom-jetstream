@@ -139,7 +139,7 @@ PageSpeed.prototype = {
       
       self.addItemToReport('Resources', {
         "speed" : reqTime,
-        "url" : mainUrl.host == rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname,
+        "url" : mainUrl.host === rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname,
         "size": contentLength ? contentLength : self.resources[response.url].size
       });
       self.logMetric('resource-speed', reqTime);
