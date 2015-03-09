@@ -13,6 +13,11 @@ MetricTracker.prototype = {
   },
 
   setMetric : function (name, amount) {
+    // We're not tracking this metric, so there's no threshold.
+    if (!this.metrics[name]) {
+      return;
+    }
+    
     if (!this.metrics[name] || !this.metrics[name].currentAmount) {
       this.metrics[name].currentAmount = amount;
       return this;
