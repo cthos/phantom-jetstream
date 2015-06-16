@@ -119,7 +119,7 @@ PageSpeed.prototype = {
       if (response.bodySize && response.bodySize > self.resources[response.url].size) {
         self.resources[response.url].size = response.bodySize;
       }
-      
+
       if (response.stage !== 'end') {
         return;
       }
@@ -128,15 +128,15 @@ PageSpeed.prototype = {
 
       var stopTime = new Date(response.time).getTime();
       var reqTime = stopTime - self.resources[response.url].startTime;
-      
+
       var contentLength = self.resources[response.url].headers['Content-Length'];
 
       self.log(response.url + " loaded in " + reqTime + " ms.", self._logResourceSpeed);
-      
+
       // Parse out the main url when adding stuff to the report if it's the same
       var mainUrl = u.parse(self.url);
       var rUrl = u.parse(response.url);
-      
+
       self.addItemToReport('Resources', {
         "speed" : reqTime,
         "url" : mainUrl.host === rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname,
@@ -146,9 +146,9 @@ PageSpeed.prototype = {
 
       var cache = self.resources[response.url].headers['X-Cache'];
 
-      if (cache && cache === 'MISS') {
+      if (cache && cache.indexOf('MISS') > -1) {
         self.log(response.url + " CACHE MISS", self._logCache);
-        self.addItemToReport("X-Cache Misses", response.url + " CACHE MISS");
+        self.addItemToReport("X-Cache Misses", response.url + ": " + cache);
 
         self._numCacheMisses++;
 
