@@ -139,6 +139,13 @@ PageSpeed.prototype = {
       var size = contentLength ? contentLength : self.resources[response.url].size;
       var pathName = mainUrl.host === rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname;
 
+      if (mainUrl.pathname === rUrl.pathname && mainUrl.host === rUrl.host) {
+        var rheaders = self.resources[response.url].headers;
+        for (var key in rheaders) {
+          self.addItemToReport('Headers', key + " : " + rheaders[key]);
+        }
+      }
+
       self.addItemToReport('Resources', {
         "speed" : reqTime,
         "url" : pathName,
@@ -186,6 +193,7 @@ PageSpeed.prototype = {
 
   setupReport : function () {
     this._reportGenerator.addSection('Page Speed');
+    this._reportGenerator.addSection('Headers');
     this._reportGenerator.addSection('Resources', new Reports.ResourceFormatter());
     this._reportGenerator.addSection("X-Cache Misses");
   },
