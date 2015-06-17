@@ -136,13 +136,17 @@ PageSpeed.prototype = {
       // Parse out the main url when adding stuff to the report if it's the same
       var mainUrl = u.parse(self.url);
       var rUrl = u.parse(response.url);
+      var size = contentLength ? contentLength : self.resources[response.url].size;
+      var pathName = mainUrl.host === rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname;
 
       self.addItemToReport('Resources', {
         "speed" : reqTime,
-        "url" : mainUrl.host === rUrl.host ? rUrl.pathname : rUrl.host + rUrl.pathname,
-        "size": contentLength ? contentLength : self.resources[response.url].size
+        "url" : pathName,
+        "size": size
       });
-      self.logMetric('resource-speed', reqTime);
+
+      self.logMetric('resource-speed', reqTime, pathName);
+      self.logMetric('resource-size', size, pathName);
 
       var cache = self.resources[response.url].headers['X-Cache'];
 
@@ -218,9 +222,9 @@ PageSpeed.prototype = {
     this._reportGenerator.addToSection(section, item);
   },
 
-  logMetric : function (metric, amount) {
+  logMetric : function (metric, amount, triggeringValue) {
     if (this._metricTracker) {
-      this._metricTracker.setMetric(metric, amount);
+      this._metricTracker.setMetric(metric, amount, triggeringValue);
     }
 
     return this;
