@@ -65,7 +65,13 @@ SiteSpeed.prototype = {
     this.pageStack = this.pages;
 
     for (var i = 0, len = this.pages.length; i < len; i++) {
-      this.pageFiles[this.pages[i]] = this.pages[i] + '.html';
+      var pagename = this.pages[i];
+
+      if (!pagename || pagename === '/') {
+        pagename = 'root';
+      }
+
+      this.pageFiles[this.pages[i]] = pagename + '.html';
     }
 
     this.ev = Event.EventDispatcher.getInstance();

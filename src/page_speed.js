@@ -150,9 +150,9 @@ PageSpeed.prototype = {
 
       var cache = self.resources[response.url].headers['X-Cache'];
 
-      if (cache && cache === 'MISS') {
+      if (cache && cache.indexOf('MISS') > -1) {
         self.log(response.url + " CACHE MISS", self._logCache);
-        self.addItemToReport("X-Cache Misses", response.url + " CACHE MISS");
+        self.addItemToReport("X-Cache Misses", response.url + ": " + cache);
 
         self._numCacheMisses++;
 
