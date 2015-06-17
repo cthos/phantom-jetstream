@@ -67,7 +67,7 @@ SiteSpeed.prototype = {
     for (var i = 0, len = this.pages.length; i < len; i++) {
       var pagename = this.pages[i];
 
-      if (!pagename || pagename == '/') {
+      if (!pagename || pagename === '/') {
         pagename = 'root';
       }
 
